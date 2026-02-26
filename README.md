@@ -1,20 +1,63 @@
-# Parisien Project
+#  Parisien project
 
-## 프로젝트 소개
-Spring Boot 기반 예약/스케줄 관리 웹 애플리케이션
+Spring MVC 기반으로 구현한 파리 여행 일정 생성 웹 애플리케이션입니다.
+사용자가 아침/점심/저녁 옵션을 선택하면,
+선택한 장소를 기반으로 하루 일정과 이동 구간을 계산하여 반환합니다.
 
-## 기술 스택
-- Java
+
+##  프로젝트 목적
+
+- Spring MVC 동작 흐름 이해
+- Controller → Service → DTO 구조 학습
+- 의존성 주입(Dependency Injection) 개념 이해
+- REST API 기반 데이터 처리 경험
+
+
+##  기술 스택
+
+- Java 17
 - Spring Boot
-- JPA
-- Thymeleaf
-- H2 / MySQL
+- Spring Web (REST Controller)
+- Validation
+- Gradle
 
-## 주요 기능
-- 날짜별 예약 조회
-- 컨트롤러 기반 MVC 구조 구현
-- 서버 사이드 렌더링
 
-## 배운 점
-- Controller → Service → Repository 계층 구조 이해
-- Git을 활용한 버전 관리
+##  프로젝트 구조
+com.example.parisien
+├── day
+│ ├── DayPlanController
+│ ├── DayPlanService
+│ ├── DayPlan
+│ ├── DayChoiceRequest
+│ ├── DayItineraryResponse
+│ ├── DayOption / DaySlot
+│
+├── place
+│ ├── Place
+│ ├── PlaceService
+│
+├── geo
+│ ├── DistanceService
+│
+├── itinerary
+│ ├── ItineraryLeg
+│ ├── ItineraryStop
+│ ├── TravelEstimator
+│
+└── ParisienApplication
+
+
+##  핵심 기능
+
+- 하루 일정 템플릿 조회
+- 옵션 선택 기반 장소 매핑
+- 장소 간 이동 거리 계산
+- 이동 시간 추정
+- 최종 일정 응답 반환
+
+
+##  실행 방법
+
+1. ParisienApplication 실행 또는 ./gradlew bootRun
+2. 서버가 실행되면 http://localhost:8080 접속
+3. API는 /days 또는 /days/{day}/submit 엔드포인트로 호출
