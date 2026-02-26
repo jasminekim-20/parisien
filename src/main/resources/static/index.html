@@ -9,42 +9,43 @@
         h1 { margin: 0 0 8px; }
         .muted { color: #666; font-size: 14px; margin: 0 0 18px; }
 
-        .panel { background: #fff; border: 1px solid #e7e7e7; border-radius: 14px; padding: 16px; margin: 14px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .panel { background:#fff; border:1px solid #e7e7e7; border-radius:14px; padding:16px; margin:14px 0; box-shadow:0 2px 10px rgba(0,0,0,0.03); }
 
-        .day-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
-        .tab { border: 1px solid #ddd; background: #fff; border-radius: 999px; padding: 10px 14px; cursor: pointer; }
-        .tab.active { border-color: #111; font-weight: 700; }
+        .day-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+        .tab { border:1px solid #ddd; background:#fff; border-radius:999px; padding:10px 14px; cursor:pointer; }
+        .tab.active { border-color:#111; font-weight:700; }
 
-        .slot-title { display:flex; align-items:center; justify-content:space-between; margin: 0 0 10px; }
-        .slot-title h2 { margin: 0; font-size: 18px; }
-        .slot-title span { color:#888; font-size: 13px; }
+        .slot-title { display:flex; align-items:center; justify-content:space-between; margin:0 0 10px; }
+        .slot-title h2 { margin:0; font-size:18px; }
+        .slot-title span { color:#888; font-size:13px; }
 
-        .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-        @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+        .grid-2 { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; }
+        @media (max-width: 720px) { .grid-2 { grid-template-columns:1fr; } }
 
-        .opt { border: 1px solid #e3e3e3; border-radius: 12px; padding: 12px; cursor: pointer; transition: transform .06s ease, border-color .06s ease; background: #fff; }
-        .opt:hover { transform: translateY(-1px); border-color: #cfcfcf; }
-        .opt.selected { border-color: #111; box-shadow: 0 0 0 2px rgba(0,0,0,0.06); }
+        .opt { border:1px solid #e3e3e3; border-radius:12px; padding:12px; cursor:pointer; transition:transform .06s ease, border-color .06s ease; background:#fff; }
+        .opt:hover { transform: translateY(-1px); border-color:#cfcfcf; }
+        .opt.selected { border-color:#111; box-shadow:0 0 0 2px rgba(0,0,0,0.06); }
 
-        .opt-head { display:flex; align-items:flex-start; justify-content:space-between; gap: 10px; }
-        .opt-label { margin: 0; font-weight: 800; }
-        .opt-place { margin: 6px 0 0; color:#555; font-size: 13px; }
+        .opt-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+        .opt-label { margin:0; font-weight:800; }
+        .opt-place { margin:6px 0 0; color:#555; font-size:13px; }
 
-        .img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; display:block; margin: 10px 0 0; background:#f2f2f2; }
+        .img { width:100%; height:150px; object-fit:cover; border-radius:10px; display:block; margin:10px 0 0; background:#f2f2f2; }
 
-        .actions { display:flex; gap: 10px; justify-content:flex-end; }
-        button { padding: 10px 14px; border-radius: 10px; border: 1px solid #ddd; background:#fff; cursor:pointer; }
+        .actions { display:flex; gap:10px; justify-content:flex-end; }
+        button { padding:10px 14px; border-radius:10px; border:1px solid #ddd; background:#fff; cursor:pointer; }
         button.primary { border-color:#111; background:#111; color:#fff; }
 
-        .itinerary { display:grid; gap: 10px; }
-        .item { border: 1px solid #e7e7e7; border-radius: 12px; padding: 12px; background:#fff; }
-        .item-top { display:flex; justify-content:space-between; gap: 10px; }
-        .time { font-weight: 800; }
-        .badge { font-size: 12px; color:#666; }
+        .itinerary { display:grid; gap:10px; }
+        .item { border:1px solid #e7e7e7; border-radius:12px; padding:12px; background:#fff; }
+        .item-top { display:flex; justify-content:space-between; gap:10px; }
+        .time { font-weight:800; }
+        .badge { font-size:12px; color:#666; }
 
-        pre { white-space: pre-wrap; background:#0b0b0b; color:#f0f0f0; padding: 12px; border-radius: 12px; overflow:auto; }
+        pre { white-space:pre-wrap; background:#0b0b0b; color:#f0f0f0; padding:12px; border-radius:12px; overflow:auto; }
     </style>
 </head>
+
 <body>
 <h1>parisien</h1>
 <p class="muted">Day 1~5 중 하루를 고르고, 아침/점심/저녁을 양자택일로 선택하면 실제 명소/카페가 끼워진 하루 코스가 나와.</p>
@@ -69,42 +70,41 @@
     let days = [];
     let activeDay = 1;
 
-    // 저장되는 선택(optionId)
-    const selections = new Map(); // key: `${day}-${slot}` -> optionId
+    // key: `${day}-${slot}` -> optionId
+    const selections = new Map();
 
     async function init() {
-        const res = await fetch("/days");
-        days = await res.json();
+      const res = await fetch("/days");
+      days = await res.json();
 
-        renderDayTabs();
-        renderDay(activeDay);
+      renderDayTabs();
+      renderDay(activeDay);
     }
 
     function renderDayTabs() {
-        const wrap = document.getElementById("dayTabs");
-        wrap.innerHTML = days.map(d => `
-        <button class="tab ${d.day === activeDay ? "active" : ""}" data-day="${d.day}">Day ${d.day}</button>
-      `).join("");
+      const tabs = document.getElementById("dayTabs");
+      tabs.innerHTML = "";
 
-        wrap.querySelectorAll(".tab").forEach(btn => {
-            btn.addEventListener("click", () => {
-                activeDay = Number(btn.getAttribute("data-day"));
-                document.getElementById("resultPanel").style.display = "none";
-                renderDayTabs();
-                renderDay(activeDay);
-            });
-        });
+      for (let dayNum = 1; dayNum <= 5; dayNum++) {
+        const btn = document.createElement("button");
+        btn.className = "tab" + (dayNum === activeDay ? " active" : "");
+        btn.textContent = `Day ${dayNum}`;
+        btn.addEventListener("click", () => renderDay(dayNum));
+        tabs.appendChild(btn);
+      }
     }
 
     function renderDay(dayNum) {
-        const plan = days.find(d => d.day === dayNum);
-        const view = document.getElementById("dayView");
-        if (!plan) return;
+      activeDay = dayNum;
+      renderDayTabs();
 
-        view.innerHTML = `
-        ${renderSlot(plan, "MORNING", "🌅 아침")}
-        ${renderSlot(plan, "LUNCH", "🍽 점심")}
-        ${renderSlot(plan, "DINNER", "🌙 저녁")}
+      const plan = days.find(d => d.day === dayNum);
+      const view = document.getElementById("dayView");
+
+      view.innerHTML = `
+        ${renderSlot(plan, dayNum, "MORNING", "🌅 아침")}
+        ${renderSlot(plan, dayNum, "LUNCH",   "🍽 점심")}
+        ${renderSlot(plan, dayNum, "DINNER",  "🌙 저녁")}
         <div class="panel">
           <div class="actions">
             <button id="resetBtn">선택 초기화</button>
@@ -113,148 +113,193 @@
         </div>
       `;
 
-        // 카드 클릭 이벤트
-        view.querySelectorAll(".opt").forEach(card => {
-            card.addEventListener("click", () => {
-                const slot = card.getAttribute("data-slot");
-                const optionId = card.getAttribute("data-option-id");
-                selections.set(`${dayNum}-${slot}`, optionId);
-                highlightSelected(dayNum, slot);
-            });
+      // 카드 클릭 이벤트
+      view.querySelectorAll(".opt").forEach(card => {
+        card.addEventListener("click", () => {
+          const slot = card.getAttribute("data-slot");
+          const optionId = card.getAttribute("data-option-id");
+          selections.set(`${dayNum}-${slot}`, optionId);
+          highlightSelected(dayNum, slot);
         });
+      });
 
-        // 초기 하이라이트
+      // 초기 하이라이트
+      ["MORNING", "LUNCH", "DINNER"].forEach(slot => highlightSelected(dayNum, slot));
+
+      // 초기화
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        ["MORNING", "LUNCH", "DINNER"].forEach(slot => selections.delete(`${dayNum}-${slot}`));
         ["MORNING", "LUNCH", "DINNER"].forEach(slot => highlightSelected(dayNum, slot));
+        document.getElementById("resultPanel").style.display = "none";
+      });
 
-        document.getElementById("resetBtn").addEventListener("click", () => {
-            ["MORNING", "LUNCH", "DINNER"].forEach(slot => selections.delete(`${dayNum}-${slot}`));
-            ["MORNING", "LUNCH", "DINNER"].forEach(slot => highlightSelected(dayNum, slot));
-            document.getElementById("resultPanel").style.display = "none";
+      // 제출
+      document.getElementById("submitBtn").addEventListener("click", async () => {
+        const m = selections.get(`${dayNum}-MORNING`);
+        const l = selections.get(`${dayNum}-LUNCH`);
+        const d = selections.get(`${dayNum}-DINNER`);
+
+        if (!m) return alert("아침에서 하나를 골라줘.");
+        if (!l) return alert("점심에서 하나를 골라줘.");
+        if (!d) return alert("저녁에서 하나를 골라줘.");
+
+        const payload = { morningOptionId: m, lunchOptionId: l, dinnerOptionId: d };
+
+        const res = await fetch(`/days/${dayNum}/submit`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
 
-        document.getElementById("submitBtn").addEventListener("click", async () => {
-            const m = selections.get(`${dayNum}-MORNING`);
-            const l = selections.get(`${dayNum}-LUNCH`);
-            const d = selections.get(`${dayNum}-DINNER`);
+        if (!res.ok) return alert("제출 실패: " + res.status);
 
-            if (!m) return alert("아침에서 하나를 골라줘.");
-            if (!l) return alert("점심에서 하나를 골라줘.");
-            if (!d) return alert("저녁에서 하나를 골라줘.");
+        const out = await res.json();
+        renderResult(out);
+      });
 
-            const payload = { morningOptionId: m, lunchOptionId: l, dinnerOptionId: d };
-
-            const res = await fetch(`/days/${dayNum}/submit`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            if (!res.ok) return alert("제출 실패: " + res.status);
-
-            const out = await res.json();
-            renderResult(out);
-        });
-
-        // 명소는 Wikipedia 이미지 자동 시도
-        hydrateAttractionImagesFromWikipedia(view);
+      // 이미지 붙이기
+      hydrateImages(view);
     }
 
-    function renderSlot(plan, slotKey, slotTitle) {
-        const slot = plan.slots.find(s => s.slot === slotKey);
-        const a = slot.optionA;
-        const b = slot.optionB;
+    function renderSlot(plan, dayNum, slotName, title) {
+      const slot = plan?.slots?.find(s => s.slot === slotName);
 
+      if (!slot?.optionA || !slot?.optionB) {
         return `
+          <div class="panel">
+            <div class="slot-title">
+              <h2>${title}</h2>
+              <span>${slotName}</span>
+            </div>
+            <div class="muted">데이터 준비중</div>
+          </div>
+        `;
+      }
+
+      return `
         <div class="panel">
           <div class="slot-title">
-            <h2>${slotTitle}</h2>
-            <span>둘 중 하나만</span>
+            <h2>${title}</h2>
+            <span>${slotName}</span>
           </div>
           <div class="grid-2">
-            ${renderOption(plan.day, slotKey, a)}
-            ${renderOption(plan.day, slotKey, b)}
+            ${renderOption(dayNum, slotName, slot.optionA)}
+            ${renderOption(dayNum, slotName, slot.optionB)}
           </div>
         </div>
       `;
     }
 
     function renderOption(dayNum, slotKey, opt) {
-        const p = opt.place;
-        return `
-        <div class="opt" data-day="${dayNum}" data-slot="${slotKey}" data-option-id="${escapeHtml(opt.optionId)}"
-             data-place-type="${escapeHtml(p.type)}" data-place-name="${escapeHtml(p.name)}">
+      const p = opt.place;
+      const img = p.imageUrl ? escapeHtml(p.imageUrl) : PLACEHOLDER;
+
+      return `
+        <div class="opt"
+             data-day="${dayNum}"
+             data-slot="${slotKey}"
+             data-option-id="${escapeHtml(opt.optionId)}"
+             data-place-type="${escapeHtml(p.type)}"
+             data-place-name="${escapeHtml(p.name)}"
+             data-place-img="${escapeHtml(p.imageUrl || "")}">
           <div class="opt-head">
             <p class="opt-label">${escapeHtml(opt.label)}</p>
             <span class="badge">${escapeHtml(p.type)}</span>
           </div>
           <p class="opt-place">${escapeHtml(p.name)}</p>
-          <img class="img" alt="${escapeHtml(p.name)}" src="${PLACEHOLDER}" loading="lazy">
+          <img class="img" alt="${escapeHtml(p.name)}" src="${img}" loading="lazy">
         </div>
       `;
     }
 
     function highlightSelected(dayNum, slotKey) {
-        const selectedId = selections.get(`${dayNum}-${slotKey}`);
-        document.querySelectorAll(`.opt[data-day="${dayNum}"][data-slot="${slotKey}"]`).forEach(el => {
-            const isSelected = el.getAttribute("data-option-id") === selectedId;
-            el.classList.toggle("selected", isSelected);
-        });
+      const selectedId = selections.get(`${dayNum}-${slotKey}`);
+      document.querySelectorAll(`.opt[data-day="${dayNum}"][data-slot="${slotKey}"]`).forEach(el => {
+        el.classList.toggle("selected", el.getAttribute("data-option-id") === selectedId);
+      });
     }
 
     function renderResult(out) {
-        document.getElementById("resultPanel").style.display = "block";
-        document.getElementById("conceptTitle").textContent = `Day ${out.day} · ${out.conceptTitle}`;
+      document.getElementById("resultPanel").style.display = "block";
+      document.getElementById("conceptTitle").textContent = `Day ${out.day}`;
 
-        const wrap = document.getElementById("itinerary");
-        wrap.innerHTML = (out.items || []).map(it => `
-        <div class="item">
-          <div class="item-top">
-            <span class="time">${escapeHtml(it.time)} · ${escapeHtml(it.title)}</span>
-            <span class="badge">${escapeHtml(it.place.type)}</span>
+      const wrap = document.getElementById("itinerary");
+      wrap.innerHTML = (out.stops || []).map(s => {
+        const leg = s.nextLeg;
+
+
+        const minutes = leg?.durationMin ?? leg?.minutes;
+        const km = leg?.distanceKm ?? leg?.km;
+        const mode = leg?.mode;
+
+        const parts = [];
+        if (mode) parts.push(escapeHtml(mode));
+        if (typeof minutes === "number") parts.push(`${minutes}분`);
+        if (typeof km === "number") parts.push(`${km}km`);
+        const legText = parts.length ? `다음 이동: ${parts.join(" · ")}` : "";
+
+        return `
+          <div class="item">
+            <div class="item-top">
+              <span class="time">${escapeHtml(s.slot)}</span>
+              <span class="badge">${escapeHtml(s.place.type)}</span>
+            </div>
+            <div style="margin-top:6px; font-weight:800;">${escapeHtml(s.place.name)}</div>
+            ${legText ? `<div class="muted" style="margin-top:4px;">${legText}</div>` : ""}
           </div>
-          <div style="margin-top:6px; font-weight:800;">${escapeHtml(it.place.name)}</div>
-          <div class="muted" style="margin-top:4px;">${escapeHtml(it.detail)}</div>
-          <div class="muted" style="margin-top:6px;">(${Number(it.place.lat).toFixed(5)}, ${Number(it.place.lng).toFixed(5)})</div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
 
-        document.getElementById("raw").textContent = JSON.stringify(out, null, 2);
-        window.scrollTo({ top: document.getElementById("resultPanel").offsetTop - 10, behavior: "smooth" });
+      document.getElementById("raw").textContent = JSON.stringify(out, null, 2);
     }
 
-    async function hydrateAttractionImagesFromWikipedia(scopeEl) {
-        const cards = scopeEl.querySelectorAll('.opt[data-place-type="ATTRACTION"]');
-        for (const card of cards) {
-            const img = card.querySelector("img.img");
-            const name = card.getAttribute("data-place-name");
-            const url = await fetchWikipediaThumbnail(name);
-            if (url) img.src = url;
-        }
+    // --- Images ---
+    async function hydrateImages(scopeEl) {
+      const cards = scopeEl.querySelectorAll(".opt");
+      for (const card of cards) {
+        const imgEl = card.querySelector("img.img");
+        if (!imgEl) continue;
+
+        // 1) place.imageUrl exist
+        const direct = card.getAttribute("data-place-img");
+        if (direct) continue;
+
+        // 2) 없으면 위키 검색으로 붙임
+        const name = card.getAttribute("data-place-name");
+        const url = await fetchWikiThumbBySearch(name);
+        if (url) imgEl.src = url;
+      }
     }
 
-    async function fetchWikipediaThumbnail(placeName) {
-        const title = encodeURIComponent(placeName.replaceAll("’", "'"));
-        const api = `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`;
-        try {
-            const res = await fetch(api, { headers: { "Accept": "application/json" } });
-            if (!res.ok) return null;
-            const data = await res.json();
-            return data?.thumbnail?.source || null;
-        } catch (e) {
-            return null;
-        }
+    async function fetchWikiThumbBySearch(placeName) {
+      const q = encodeURIComponent(placeName.replaceAll("’", "'"));
+      const api =
+        `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*` +
+        `&generator=search&gsrsearch=${q}&gsrlimit=1&prop=pageimages&pithumbsize=640`;
+
+      try {
+        const res = await fetch(api, { headers: { "Accept": "application/json" } });
+        if (!res.ok) return null;
+        const data = await res.json();
+        const pages = data?.query?.pages;
+        if (!pages) return null;
+        const firstKey = Object.keys(pages)[0];
+        return pages[firstKey]?.thumbnail?.source || null;
+      } catch {
+        return null;
+      }
     }
 
     function escapeHtml(str) {
-        return String(str)
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    init().catch(err => console.error(err));
+    init().catch(console.error);
 </script>
 </body>
 </html>

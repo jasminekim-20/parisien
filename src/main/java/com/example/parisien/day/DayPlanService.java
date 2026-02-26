@@ -14,6 +14,7 @@ import java.util.List;
 public class DayPlanService {
 
     private final List<DayPlan> plans;
+
     private final PlaceService placeService;
     private final DistanceService distanceService;
     private final TravelEstimator travelEstimator;
@@ -75,20 +76,6 @@ public class DayPlanService {
         return travelEstimator.estimate(km);
     }
 
-    /**
-     * optionId로 DayOption을 찾아서 그 option이 연결된 placeId를 반환한다.
-     *
-     * 전제(네가 설명한 구조):
-     * - DayPlan -> slots(아침/점심/저녁)
-     * - DaySlot -> options(2개)
-     * - DayOption -> (id, placeId 또는 place 연결 정보)
-     *
-     * 아래 getter명은 "가장 흔한" 형태로 작성했다:
-     * - DayPlan.getSlots()
-     * - DaySlot.getOptions()
-     * - DayOption.getId()
-     * - DayOption.getPlaceId()
-     */
     private String findPlaceIdByOptionId(DayPlan plan, String optionId) {
         for (DaySlot slot : plan.getSlots()) {
             for (DayOption opt : slot.getOptions()) {
